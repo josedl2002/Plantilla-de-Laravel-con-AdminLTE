@@ -3,8 +3,12 @@
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('layouts.admin');
+    return view('welcome');
 });
+
+//**Route::get('/iniciar-sesion', function () {
+//**     return view('admin.login');
+//*})->name('login');
 
 Route::middleware([
     'auth:sanctum',
@@ -12,6 +16,9 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::get('/dashboard', function () {
-        return view('dashboard');
+        return view('layouts.admin');
     })->name('dashboard');
+    Route::get('/inicio', function(){
+        return view('Prueba.index');
+    })->name('inicio');
 });

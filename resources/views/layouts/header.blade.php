@@ -183,8 +183,17 @@
                 <!--end::Menu Body-->
                 <!--begin::Menu Footer-->
                 <li class="user-footer">
-                  <a href="#" class="btn btn-default btn-flat">Profile</a>
-                  <a href="#" class="btn btn-default btn-flat float-end">Sign out</a>
+                  <a href="{{ route('profile.show') }}" class="btn btn-primary btn-flat float-end me-2">
+                  <i class="fas fa-user me-1"></i> {{ __('Profile') }}
+                  </a>
+                  <!--<a href="#" class="btn btn-default btn-flat">Profile</a>-->
+                  <form method="POST" action="{{ route('logout') }}" x-data>
+                      @csrf
+                      <button type="submit" class="dropdown-link-style" @click.prevent="$root.submit()"> <!-- Botón de cerrar sesión funcional, solo arreglar el bug de que hay que darle 2 veces para cerrar sesión-->
+                          {{ __('Log Out') }}
+                      </button>
+                  </form>
+                 <!-- <a href="#" class="btn btn-default btn-flat float-end">Sign out</a> -->
                 </li>
                 <!--end::Menu Footer-->
               </ul>
