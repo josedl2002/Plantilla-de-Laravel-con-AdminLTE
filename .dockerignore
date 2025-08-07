@@ -1,35 +1,118 @@
-# Include any files or directories that you don't want to be copied to your
-# container here (e.g., local build artifacts, temporary files, etc.).
-#
-# For more help, visit the .dockerignore file reference guide at
-# https://docs.docker.com/go/build-context-dockerignore/
+# 1. Version control
+.git/
+.gitignore
+.gitattributes
+.svn/
+.hg/
 
-**/.classpath
-**/.dockerignore
-**/.env
-**/.git
-**/.gitignore
-**/.project
-**/.settings
-**/.toolstarget
-**/.vs
-**/.vscode
-**/.next
-**/.cache
-**/*.*proj.user
-**/*.dbmdl
-**/*.jfm
-**/charts
-**/docker-compose*
-**/compose.y*ml
-!**/composer.json
-!**/composer.lock
-**/Dockerfile*
-**/node_modules
-**/npm-debug.log
-**/obj
-**/secrets.dev.yaml
-**/values.dev.yaml
-**/vendor
-LICENSE
-README.md
+# 2. IDE/editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*.sublime*
+*.DS_Store
+
+# 3. Environment and secrets
+.env*
+*.env
+*.pem
+*.key
+*.crt
+config.local.*
+*.local.yml
+
+# 4. Development artifacts
+node_modules/
+dist/
+build/
+out/
+tmp/
+temp/
+*.tmp
+.local/
+local/
+debug/
+*.log
+
+# 5. Test and coverage files
+test/
+tests/
+.pytest_cache/
+.coverage
+__pycache__/
+*.pyc
+*.pyo
+*.test
+
+# 6. Language-specific (not relevant here, but for completeness)
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.coverage
+# Node.js
+node_modules/
+npm-debug.log
+yarn-debug.log
+# Go
+/vendor/
+*.test
+.go-cache/
+# Java
+target/
+*.class
+.gradle/
+
+# 7. Documentation and examples
+docs/
+*.md
+README*
+*.example
+
+# 8. Docker and Compose files
+Dockerfile*
+docker-compose*
+compose.yaml
+.dockerignore
+
+# 9. Editor config
+.editorconfig
+
+# 10. Miscellaneous
+*.bak
+*.old
+*.orig
+
+# 11. Project-specific
+/storage/
+/storage/app/
+/storage/framework/
+/storage/logs/
+/bootstrap/cache/
+
+# Allow public and necessary files
+!public/
+!resources/
+!app/
+!config/
+!routes/
+!artisan
+!composer.json
+!composer.lock
+!package.json
+!phpunit.xml
+!database/
+
+# Exclude cache and logs from storage, but keep necessary directories
+storage/app/*
+!storage/app/.gitignore
+storage/framework/*
+!storage/framework/.gitignore
+storage/logs/*
+!storage/logs/.gitignore
+bootstrap/cache/*
+!bootstrap/cache/.gitignore
+
+# End of .dockerignore
