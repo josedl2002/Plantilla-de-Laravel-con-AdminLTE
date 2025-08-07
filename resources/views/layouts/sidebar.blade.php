@@ -302,8 +302,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="./docs/color-mode.html" class="nav-link">
-                  <i class="nav-icon bi bi-star-half"></i>
+              <a href="{{ asset('adminlte/dist/docs/color-mode.html') }}" class="nav-link">                  <i class="nav-icon bi bi-star-half"></i>
                   <p>Color Mode</p>
                 </a>
               </li>
@@ -317,7 +316,7 @@
                 </a>
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
-                    <a href="./docs/components/main-header.html" class="nav-link">
+                    <a href="{{ asset(/docs/components/main-header.html)}}" class="nav-link">
                       <i class="nav-icon bi bi-circle"></i>
                       <p>Main Header</p>
                     </a>
