@@ -1,0 +1,94 @@
+# syntax=docker/dockerfile:1
+
+# --- Build Stage ---
+FROM php:8.2-fpm-bookworm AS build
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git \
+    unzip \
+    libzip-dev \
+    libpng-dev \
+    libicu-dev \
+    libpq-dev \
+    cron \
+    supervisor \
+    postgresql-client \
+    nodejs \
+    npm \
+ && rm -rf /var/lib/apt/lists/*
+
+# Install PHP extensions
+RUN docker-php-ext-install \
+    pdo_pgsql \
+    zip \
+    gd \
+    intl \
+    bcmath \
+    pcntl \
+    opcache \
+    exif
+
+# Configure PHP
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+COPY --link docker/php/local.ini $PHP_INI_DIR/conf.d/
+
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+WORKDIR /var/www
+
+# Copy only composer files and install PHP dependencies (for better cache)
+COPY --link composer.json composer.lock ./
+RUN composer install --no-dev --optimize-autoloader --no-interaction
+
+# Copy only package files and install Node dependencies (for better cache)
+COPY --link package.json package-lock.json ./
+RUN if [ -f package.json ]; then npm install; fi
+
+# Copy application source
+COPY --link . .
+
+# Build frontend assets if package.json exists
+RUN if [ -f package.json ]; then npm run build; fi
+
+# Set permissions
+RUN chown -R www-data:www-data /var/www
+
+# --- Final Stage ---
+FROM php:8.2-fpm-bookworm AS final
+
+# Install runtime system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    cron \
+    supervisor \
+    postgresql-client \
+ && rm -rf /var/lib/apt/lists/*
+
+# Create non-root user
+RUN groupadd -r appuser && useradd -m -g appuser appuser
+
+# Configure PHP
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+COPY --link docker/php/local.ini $PHP_INI_DIR/conf.d/
+
+WORKDIR /var/www
+
+# Copy built application from build stage
+COPY --from=build --link /var/www /var/www
+
+# Copy supervisor configs
+COPY --link docker/supervisor/cron.conf /etc/supervisor/conf.d/cron.conf
+COPY --link docker/supervisor/worker.conf /etc/supervisor/conf.d/worker.conf
+
+# Setup cron job for Laravel schedule
+RUN (crontab -l 2>/dev/null; echo "* * * * * cd /var/www && php artisan schedule:run >> /dev/null 2>&1") | crontab -
+
+# Set permissions
+RUN chown -R appuser:appuser /var/www
+
+USER appuser
+
+# Expose no ports (handled by nginx container)
+
+CMD ["php-fpm"]
