@@ -3,7 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Counter;
 use App\Livewire\Prueba;
- 
+use App\Livewire\Admin\Index;
+
 Route::get('/counter', Counter::class);
 Route::get('/', function () {
     return view('welcome');
@@ -23,6 +24,7 @@ Route::middleware([
         return view('layouts.admin');
     })->name('dashboard');
     Route::get('/prueba', Prueba::class);
+    Route::get('/admin/dashboard', Index::class);
 //**    Route::get('/inicio', function(){
 //**         return view('Prueba.index');
 //** */    })->name('inicio');
