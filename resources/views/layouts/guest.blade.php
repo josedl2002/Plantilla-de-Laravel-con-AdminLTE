@@ -12,13 +12,29 @@
 
     @livewireStyles
 </head>
-<body class="login-page bg-body-secondary">
-    <div class="login-box">
+<body class="login-page">
+    <style>
+        .login-page {
+            background: linear-gradient(135deg, #1e3a5f 0%, #2d5a8e 30%, #4a8bc2 70%, #6db3e6 100%);
+            position: relative;
+        }
+        .login-page::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(255,255,255,0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.05) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(255,255,255,0.06) 0%, transparent 50%);
+            pointer-events: none;
+        }
+    </style>
+    <div class="login-box" style="position:relative;z-index:1">
         <div class="login-logo">
             <b>Administrador</b>
         </div>
 
-        {{ $slot }}
+        @yield('content')
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
