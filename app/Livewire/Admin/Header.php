@@ -8,21 +8,15 @@ class Header extends Component
 {
     public $unreadMessages = 3;
     public $notifications = 15;
-    public $user = [
-        'name' => 'Alexander Pierce',
-        'image' => 'assets/img/user2-160x160.jpg',
-        'role' => 'Web Developer',
-        'since' => 'Nov. 2023'
-    ];
 
     public function toggleSidebar()
     {
-        $this->emit('toggleSidebar');
+        $this->dispatch('toggleSidebar');
     }
 
     public function toggleFullscreen()
     {
-        $this->dispatchBrowserEvent('toggleFullscreen');
+        $this->dispatch('toggleFullscreen');
     }
 
     public function render()

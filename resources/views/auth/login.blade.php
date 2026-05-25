@@ -1,48 +1,58 @@
-<x-guest-layout>
-    <x-authentication-card>
-        <x-slot name="logo">
-            <x-authentication-card-logo />
-        </x-slot>
+<div class="card">
+    <div class="card-body login-card-body">
+        <p class="login-box-msg">Inicia sesión para comenzar</p>
 
-        <x-validation-errors class="mb-4" />
+        @if ($errors->any())
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <div class="fw-bold">¡Error!</div>
+                <ul class="mb-0 ps-3">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        @endif
 
         @session('status')
-            <div class="mb-4 font-medium text-sm text-green-600 dark:text-green-400">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
                 {{ $value }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endsession
 
         <form method="POST" action="{{ route('login') }}">
             @csrf
 
-            <div>
-                <x-label for="email" value="{{ __('Email') }}" />
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" name="name" placeholder="Usuario" value="{{ old('name') }}" required autofocus autocomplete="username">
+                <div class="input-group-text"><span class="bi bi-person"></span></div>
             </div>
 
-            <div class="mt-4">
-                <x-label for="password" value="{{ __('Password') }}" />
-                <x-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="current-password" />
+            <div class="input-group mb-3">
+                <input type="password" class="form-control" name="password" placeholder="Contraseña" required autocomplete="current-password">
+                <div class="input-group-text"><span class="bi bi-lock-fill"></span></div>
             </div>
 
-            <div class="block mt-4">
-                <label for="remember_me" class="flex items-center">
-                    <x-checkbox id="remember_me" name="remember" />
-                    <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">{{ __('Remember me') }}</span>
-                </label>
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                @if (Route::has('password.request'))
-                    <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('password.request') }}">
-                        {{ __('Forgot your password?') }}
-                    </a>
-                @endif
-
-                <x-button class="ms-4">
-                    {{ __('Log in') }}
-                </x-button>
+            <div class="row">
+                <div class="col-8">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="remember" id="remember">
+                        <label class="form-check-label" for="remember">Recordarme</label>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">Ingresar</button>
+                    </div>
+                </div>
             </div>
         </form>
-    </x-authentication-card>
-</x-guest-layout>
+
+        @if (Route::has('password.request'))
+            <p class="mb-0 mt-3">
+                <a href="{{ route('password.request') }}">Olvidé mi contraseña</a>
+            </p>
+        @endif
+    </div>
+</div>
